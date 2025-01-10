@@ -7,7 +7,7 @@ import { authRoutes } from "./routes/auth.js";
 import { jobAdRoutes } from "./routes/jobAd.js";
 // import './cronJob.js'
 
-const PORT = 5000;
+const PORT = 8000;
 
 const app = express();
 
@@ -18,7 +18,7 @@ app.use(cors({
 // app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-connectDB();
+// connectDB();
 
 const limiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 1 minutes

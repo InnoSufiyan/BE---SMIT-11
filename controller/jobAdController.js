@@ -9,9 +9,15 @@ cloudinary.config({
 
 export const addJobController = async (req, res) => {
     console.log(req.body, '====>>req.body');
-
+    console.log(req.file, '====>>req.file');
     try {
         const folder = 'jobAds';
+
+        // const result = await cloudinary.uploader.upload(req.file.path, {
+        //     resource_type: 'auto',
+        //     folder: folder
+        // });
+
 
         const result = await new Promise((resolve, reject) => {
             const bufferStream = new stream.PassThrough();
@@ -33,7 +39,7 @@ export const addJobController = async (req, res) => {
         });
 
         console.log(result, '====>>result');
-        res.send({ status: 'success', message: 'Job Ad Added' });
+        res.send({ status: 'success', message: 'Job Ad Added', result: result });
     } catch (error) {
         console.log(error, '===>>> error');
         console.log(error.message, '===>>> error message');

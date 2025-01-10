@@ -196,11 +196,11 @@ export const login = async (req, res) => {
         if (email && password) {
             // return res.send("login controller")
 
-            let user = await Users.findOne({ Email: email });
+            let user = await Users.findOne({ email });
             console.log(user);
             if (user) {
-                const isValid = compareSync(password, user.Password);
-                if (user.Email === email && isValid) {
+                const isValid = compareSync(password, user.password);
+                if (user.email === email && isValid) {
                     user.Password = undefined;
                     const token = GenerateToken({ data: user, expiresIn: '24h' });
                     res.cookie('token', token, { httpOnly: true });

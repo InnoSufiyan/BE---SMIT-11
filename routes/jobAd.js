@@ -9,10 +9,10 @@ export const jobAdRoutes = express.Router();
 
 
 
-//only file path without extension
+// only file path without extension
 // const upload = multer({ dest: 'img/jobAds' });
 
-//file storing with extension
+// // file storing with extension
 // const multerStorage = multer.diskStorage({
 //     destination: (req, file, cb) => {
 //         cb(null, 'img/jobAds');
