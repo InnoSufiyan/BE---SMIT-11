@@ -25,6 +25,9 @@ const register = mongoose.Schema(
             trim: true,
 
         },
+        profilePicture: {
+            type: String
+        },
         email: {
             type: String,
             required: [true, 'Please Add Email'],
@@ -55,7 +58,7 @@ const register = mongoose.Schema(
         //     minlength: 8,
         //     trim: true,
         // },
-        ExpiryPasswordResetToken: {
+        expiryPasswordResetToken: {
             type: Date,
         }
     },

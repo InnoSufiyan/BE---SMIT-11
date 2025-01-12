@@ -5,11 +5,16 @@ import { rateLimit } from 'express-rate-limit'
 import { connectDB } from "./config/default.js";
 import { authRoutes } from "./routes/auth.js";
 import { jobAdRoutes } from "./routes/jobAd.js";
+import { createRateLimiter } from "./middleware/rate-limit.js";
+import helmet from "helmet";
+import mongoSanitize from 'express-mongo-sanitize';
 // import './cronJob.js'
 
 const PORT = 8000;
 
 const app = express();
+
+app.use(helmet());
 
 dotenv.config();
 app.use(cors({
@@ -17,23 +22,15 @@ app.use(cors({
 }));
 // app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(mongoSanitize());
 
-// connectDB();
-
-const limiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minutes
-    limit: 4, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
-    // standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
-    // legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-    // store: ... , // Use an external store for consistency across multiple server instances.
-    message: "Too many requests, please try again later.",
-})
+connectDB();
 
 // Apply the rate limiting middleware to all requests.
-app.use(limiter)
+
 
 app.use("/api/auth", authRoutes);
-app.use("/api/jobAd", jobAdRoutes);
+app.use("/api/jobAd", createRateLimiter(1 * 60 * 1000, 40, "Too much job request hit, please try again after a minute"), jobAdRoutes);
 
 app.get("/", (request, response) => {
     response.send("Hello World");
