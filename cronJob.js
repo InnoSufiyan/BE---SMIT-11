@@ -1,5 +1,7 @@
 import cron from 'node-cron'
 
-cron.schedule('*/10 * * * *', () => {
+console.log("==>> file is working")
+
+cron.schedule('* * * * *', () => {
     console.log('running a task every minute');
 });

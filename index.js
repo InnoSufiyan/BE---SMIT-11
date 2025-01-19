@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import { Redis } from "ioredis";
 import { rateLimit } from 'express-rate-limit'
 import { connectDB } from "./config/default.js";
 import { authRoutes } from "./routes/auth.js";
@@ -8,11 +9,30 @@ import { jobAdRoutes } from "./routes/jobAd.js";
 import { createRateLimiter } from "./middleware/rate-limit.js";
 import helmet from "helmet";
 import mongoSanitize from 'express-mongo-sanitize';
+import { usersRoutes } from "./routes/user.js";
 // import './cronJob.js'
 
 const PORT = 8000;
 
 const app = express();
+
+export const redis = new Redis({
+    host: 'redis-19098.c292.ap-southeast-1-1.ec2.redns.redis-cloud.com',
+    port: 19098,
+    password: 'wWTCSejS0CfPI1SW5A2riDEEE3U1cupi',
+});
+
+redis.on("connect", () => {
+    console.log("Redis is connected");
+});
+
+redis.on('close', () => {
+    console.log('Connection closed');
+});
+
+redis.on('error', (err) => {
+    console.error('Error with Redis:', err);
+});
 
 app.use(helmet());
 
@@ -30,6 +50,7 @@ connectDB();
 
 
 app.use("/api/auth", authRoutes);
+app.use("/api/users", usersRoutes);
 app.use("/api/jobAd", createRateLimiter(1 * 60 * 1000, 40, "Too much job request hit, please try again after a minute"), jobAdRoutes);
 
 app.get("/", (request, response) => {
