@@ -17,9 +17,9 @@ const PORT = 8000;
 const app = express();
 
 export const redis = new Redis({
-    host: 'redis-19098.c292.ap-southeast-1-1.ec2.redns.redis-cloud.com',
-    port: 19098,
-    password: 'wWTCSejS0CfPI1SW5A2riDEEE3U1cupi',
+    host: '',
+    port: '',
+    password: '',
 });
 
 redis.on("connect", () => {
